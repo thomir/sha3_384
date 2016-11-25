@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import hashlib
+import sys
+
+if sys.version < '3.6':
+    import sha3  # noqa
+
+
+def main():
+    if len(sys.argv) <= 1:
+        usage()
+        sys.exit(1)
+    for file_path in sys.argv[1:]:
+        try:
+            value = calculate_file_hash(file_path)
+        except IOError as e:
+            value = str(e)
+        finally:
+            print("%s:\t%s" % (file_path, value))
+
+
+def usage():
+    print("Usage: %s FILE [FILE...]" % sys.argv[0])
+    print("Calculates the sha3_384 hash of every FILE and prints it to stdout")
+
+
+def calculate_file_hash(file_path):
+    blocksize = 2**20
+    with open(file_path, 'rb') as snap_file:
+        hasher = hashlib.sha3_384()
+        while True:
+            buf = snap_file.read(blocksize)
+            if not buf:
+                break
+            hasher.update(buf)
+        return hasher.hexdigest()
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,20 @@
+name: sha3384
+version: '1.0'
+summary: Calculate sha3_384 hashes of files.
+description: |
+  Just like 'md5sum', but for sha3_384.
+
+grade: stable
+confinement: strict
+
+apps:
+  sha3384:
+    command: sha3384
+    plugs: [home]
+
+parts:
+  app:
+    # See 'snapcraft plugins'
+    plugin: python
+    requirements: requirements.txt
+    source: .
